@@ -1,8 +1,8 @@
-import { Event } from "../models/event.models.js";
-import mailSender from "../utils/mailSender.js";
-import { User } from "../models/user.models.js";
-import volunteerInviteTemplate from "../mail/templates/prospectiveVolunteerEmailTemplate.js";
-import sleep from "../utils/sleep.js";
+const Event = require("../models/event.models.js");
+const mailSender = require("../utils/mailSender.js");
+const User = require("../models/user.models.js");
+const volunteerInviteTemplate = require("../mail/templates/prospectiveVolunteerEmailTemplate.js");
+const sleep = require("../utils/sleep.js");
 
 const CS_HOST = process.env.CS_HOST || "http://localhost:5173";
 
@@ -13,7 +13,7 @@ exports.watchEvents = () => Event.watch().on("change", async next => {
             const event = next.fullDocument;
             const tags = event.tags;
             const users = await User.find();
-            const prospectiveVolunteers = []; 
+            const prospectiveVolunteers = new Set(); 
             for (const tag of tags) {
                 for (const user of users) {
                     var hasTag = false;
@@ -26,7 +26,7 @@ exports.watchEvents = () => Event.watch().on("change", async next => {
                     if (!hasTag) {
                         continue;
                     }
-                    prospectiveVolunteers.push(user);
+                    prospectiveVolunteers.add(user);
                 }
             }
 
