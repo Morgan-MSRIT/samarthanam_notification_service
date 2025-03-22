@@ -23,19 +23,19 @@ const eventSchema = new Schema({
     type: String,
     required: true
   },
-  start_date: {
+  startDate: {
     type: Date,
     required: true
   },
-  end_date: {
+  endDate: {
     type: Date,
     required: true
   },
-  is_registration_required: {
+  isRegistrationRequired: {
     type: Boolean,
     default: true
   },
-  registered_participants: [{
+  registeredParticipants: [{
     type: String
   }],
   tasks: [{
@@ -46,7 +46,7 @@ const eventSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Volunteer'
   }],
-  total_volunteer_req: {
+  totalVolunteerReq: {
     type: Number,
     default: 0
   }

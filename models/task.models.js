@@ -6,30 +6,30 @@ const taskSchema = new Schema({
     type: String,
     required: true
   },
-  start_time: {
+  startTime: {
     type: Date,
     required: true
   },
-  end_time: {
+  endTime: {
     type: Date,
     required: true
   },
-  max_volunteer_needed: {
+  maxVolunteerNeeded: {
     type: Number,
     default: 1
   },
-  current_volunteer_count: {
+  currentVolunteerCount: {
     type: Number,
     default: 0
   },
   event: {
     type: Schema.Types.ObjectId,
-    ref: 'Event',
-    required: true
+    ref: 'Event'
   }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Task', taskSchema);
+
 
 // Task
 // Id : primary key string

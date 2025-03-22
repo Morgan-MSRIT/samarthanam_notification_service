@@ -27,7 +27,7 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  email_notif_allow: {
+  emailNotifAllow: {
     type: Boolean,
     default: false
   },

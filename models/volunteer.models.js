@@ -2,16 +2,16 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const volunteerSchema = new Schema({
-  user_id: {
+  user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-  task_preferred: [{
+  taskPreferred: [{
     type: Schema.Types.ObjectId,
     ref: 'Task'
   }],
-  task_allocated: [{
+  taskAllocated: [{
     type: Schema.Types.ObjectId,
     ref: 'Task'
   }],
@@ -20,7 +20,7 @@ const volunteerSchema = new Schema({
     enum: ['not started', 'ongoing', 'completed'],
     default: 'not started'
   },
-  volunteer_hrs: {
+  volunteerHrs: {
     type: Number,
     default: 0
   },
@@ -32,6 +32,7 @@ const volunteerSchema = new Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model('Volunteer', volunteerSchema);
+
 
 // Volunteer
 // Id : primary key string

@@ -2,24 +2,24 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const feedbackSchema = new Schema({
-  event_id: {
+  event: {
     type: Schema.Types.ObjectId,
     ref: 'Event',
     required: true
   },
-  contact_hours: {
+  contactHours: {
     type: Number
   },
-  volunteer_or_participation_experience: {
+  volunteerOrParticipationExperience: {
     type: Number
   },
-  website_experience: {
+  websiteExperience: {
     type: Number
   },
-  experience_working_with_org: {
+  experienceWorkingWithOrg: {
     type: Number
   },
-  additional_info: {
+  additionalInfo: {
     type: String
   }
 }, { timestamps: true });
