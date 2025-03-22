@@ -1,6 +1,7 @@
 const Event = require("../models/event.models.js");
 const mailSender = require("../utils/mailSender.js");
 const User = require("../models/user.models.js");
+const Tag = require("../models/tag.models.js");
 const volunteerInviteTemplate = require("../mail/templates/prospectiveVolunteerEmailTemplate.js");
 const sleep = require("../utils/sleep.js");
 
@@ -18,7 +19,9 @@ exports.watchEvents = () => Event.watch().on("change", async next => {
                 for (const user of users) {
                     var hasTag = false;
                     for (const userTag of user.tags) {
-                        if (userTag.name == tag.name && user.role == "volunteer") {
+                        const userTagSchema = await Tag.findOne({ _id: userTag });
+                        const tagSchema = await Tag.findOne({ _id: tag });
+                        if (userTagSchema.name == tagSchema.name && user.role == "volunteer") {
                             hasTag = true;
                             break;
                         } 
