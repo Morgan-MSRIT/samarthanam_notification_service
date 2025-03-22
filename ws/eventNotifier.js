@@ -3,11 +3,16 @@ const mailSender = require("../utils/mailSender.js");
 const User = require("../models/user.models.js");
 const Tag = require("../models/tag.models.js");
 const volunteerInviteTemplate = require("../mail/templates/prospectiveVolunteerEmailTemplate.js");
-const sleep = require("../utils/sleep.js");
+
+const sleep = async ms => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 const CS_HOST = process.env.CS_HOST || "http://localhost:5173";
+const options = { fullDocument: "updateLookup" };
+const pipeline = [];
 
-exports.watchEvents = () => Event.watch().on("change", async next => {
+exports.watchEvents = () => Event.watch(pipeline, options).on("change", async next => {
     switch (next.operationType) {
         case 'insert':
         case 'update':
@@ -35,7 +40,7 @@ exports.watchEvents = () => Event.watch().on("change", async next => {
 
             for (const volunteer of prospectiveVolunteers) {
                 const email = volunteer.email;
-                const body = volunteerInviteTemplate(volunteer.name, event.name, `${CS_HOST}/register`, `${CS_HOST}/event/${event.id}`);
+                const body = volunteerInviteTemplate(volunteer.name, event.name, `${CS_HOST}/event/${event._id}`);
                 await mailSender(email, "Samarthanam Volunteering Opportunity!", body);
                 await sleep(5000);
             }

@@ -1,4 +1,4 @@
-const volunteerInviteTemplate = (volunteerName, eventName, registerLink, eventPage) => {
+const volunteerInviteTemplate = (volunteerName, eventName, eventPage) => {
 	return `<!DOCTYPE html>
 	<html>
 	
@@ -68,8 +68,7 @@ const volunteerInviteTemplate = (volunteerName, eventName, registerLink, eventPa
 			<div class="body">
 				<p>Dear ${volunteerName},</p>
                 <p>Based on your past volunteering experiences that you have with Samarthanam, we would like to cordially invite you
-                to participate in "${eventName}".</p>
-                <p>You may register as a volunteer <a href="${registerLink}">here</a></p>
+                to participate in <b>"${eventName}"</b>.</p>
                 <p>For more details about the event you may visit <a href="${eventPage}">here</a>.</p>
 			</div>
 			<div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
