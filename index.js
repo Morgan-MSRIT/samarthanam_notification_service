@@ -1,18 +1,25 @@
 const express=require("express");
 const app=express();
 
+const { WebSocketServer } = require("ws");
+
+
+
 //connection for databse
 const database=require("./configs/database");
 const cors=require("cors");
 // const { cloudinaryConnect }=require("./configs/cloudinary");
 const dotenv=require("dotenv");
 const { watchEvents } = require("./ws/eventNotifier");
+const { watchVolunteers } = require("./ws/volunteerNotifier.js");
+const { initializeCache } = require("./utils/cache.js");
 
 dotenv.config();
 
 
 //port no
 const PORT=process.env.PORT || 4001;
+const WS_PORT=process.env.WS_PORT || 8080;
 
 //connect
 database.connect();
@@ -47,10 +54,16 @@ app.get("/",(req,res)=>{
 
 
 //Activate server
-
-app.listen(PORT,()=>{
+app.listen(PORT, async () => {
+    await initializeCache();
     console.log(`App is running at ${PORT}`)
     watchEvents();
+    const wss = new WebSocketServer({ port: WS_PORT });
+    wss.on("connection", ws => {
+        ws.on('message', data => {
+            console.log("Recieved: %s", data);
+        })
+
+        watchVolunteers(ws);
+    });
 })
-
-
