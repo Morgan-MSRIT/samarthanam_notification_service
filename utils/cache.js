@@ -14,7 +14,7 @@ exports.initializeCache = async () => {
             volunteerTasksAllocated[volunteer._id].push(taskSchema);
         }
     }
-    console.log(volunteerTasksAllocated);
+    // console.log(volunteerTasksAllocated);
 }
 
 exports.getTaskAllocatedForVolunteer = volunteer => {
@@ -24,5 +24,5 @@ exports.getTaskAllocatedForVolunteer = volunteer => {
 exports.putTaskAllocatedForVolunteer = (volunteer, taskAllocated) => {
     volunteerTasksAllocated[volunteer._id] = taskAllocated;
     console.log("New task allocated for user.");
-    console.log(volunteerTasksAllocated);
+    // console.log(volunteerTasksAllocated);
 }

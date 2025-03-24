@@ -22,7 +22,7 @@ exports.watchVolunteers = () => {
                 break;
             case "update":
                 volunteer = await User.findOne({ _id: next.fullDocument.user });
-                const previousTaskAllocated = getTaskAllocatedForVolunteer(volunteer);
+                const previousTaskAllocated = getTaskAllocatedForVolunteer(next.fullDocument);
                 const newTaskAllocated = [];
                 for (const allocatedTask of next.fullDocument.taskAllocated) {
                     const taskSchema = await Task.findOne({ _id: allocatedTask });
@@ -37,7 +37,7 @@ exports.watchVolunteers = () => {
                     var hasTask = false;
                     if (previousTaskAllocated !== undefined) {
                         for (const previousTask of previousTaskAllocated) {
-                            if (previousTask._id === newTask._id) {
+                            if (previousTask._id.toString() === newTask._id.toString()) {
                                 hasTask = true;
                                 break;
                             }
@@ -54,7 +54,7 @@ exports.watchVolunteers = () => {
                     for (const previousTask of previousTaskAllocated) {
                         var hasTask = false;
                         for (const newTask of newTaskAllocated) {
-                            if (newTask._id === previousTask._id) {
+                            if (newTask._id.toString() === previousTask._id.toString()) {
                                 hasTask = true;
                                 break;
                             }
@@ -65,8 +65,8 @@ exports.watchVolunteers = () => {
                         removedTasks.push(previousTask);
                     }
                 }
-                
                 broadcastMessage(JSON.stringify({ volunteer: volunteer, newlyAllocatedTasks: newlyAllocatedTasks, removedTasks: removedTasks }));
+                putTaskAllocatedForVolunteer(next.fullDocument, newTaskAllocated);
                 break;
         }
     });
