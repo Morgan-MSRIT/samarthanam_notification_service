@@ -14,7 +14,7 @@ wss.on("connection", ws => {
     ws.on("close", () => {
         if (clients.has(ws)) {
             clients.delete(ws);
-            logger.info("Client disconnected");
+            console.log("Disconnected");
         }
     });
 });
