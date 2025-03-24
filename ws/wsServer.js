@@ -22,5 +22,6 @@ wss.on("connection", ws => {
 exports.broadcastMessage = (msg) => {
     for (const client of clients) {
         client.send(msg);
+        console.log("Sent message: ", msg);
     }
 }
