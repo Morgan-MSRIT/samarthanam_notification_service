@@ -15,7 +15,6 @@ const pipeline = [];
 exports.watchEvents = () => Event.watch(pipeline, options).on("change", async next => {
     switch (next.operationType) {
         case 'insert':
-        case 'update':
             const event = next.fullDocument;
             const tags = event.tags;
             const users = await User.find();

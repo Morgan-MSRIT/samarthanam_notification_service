@@ -1,12 +1,13 @@
 const Volunteer = require("../models/volunteer.models.js");
 const Task = require("../models/task.models.js");
 const User = require("../models/user.models.js");
+const broadcastMessage = require("./wsServer.js");
 const { putTaskAllocatedForVolunteer, getTaskAllocatedForVolunteer } = require("../utils/cache.js");
 
 const options = { fullDocument: "updateLookup" };
 const pipeline = [];
 
-exports.watchVolunteers = ws => {
+exports.watchVolunteers = () => {
     Volunteer.watch(pipeline, options).on("change", async next => {
         switch (next.operationType) {
             case "insert":
@@ -60,8 +61,8 @@ exports.watchVolunteers = ws => {
                         }
                         removedTasks.push(previousTask);
                     }
-
-                    ws.send(JSON.stringify({ volunteer: volunteer, newlyAllocatedTasks: newlyAllocatedTasks, removedTasks: removedTasks }));
+                    
+                    broadcastMessage(JSON.stringify({ volunteer: volunteer, newlyAllocatedTasks: newlyAllocatedTasks, removedTasks: removedTasks }));
                 }
                 break;
         }

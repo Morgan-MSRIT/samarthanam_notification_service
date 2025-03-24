@@ -19,7 +19,6 @@ dotenv.config();
 
 //port no
 const PORT=process.env.PORT || 4001;
-const WS_PORT=process.env.WS_PORT || 8080;
 
 //connect
 database.connect();
@@ -58,12 +57,5 @@ app.listen(PORT, async () => {
     await initializeCache();
     console.log(`App is running at ${PORT}`)
     watchEvents();
-    const wss = new WebSocketServer({ port: WS_PORT });
-    wss.on("connection", ws => {
-        ws.on('message', data => {
-            console.log("Recieved: %s", data);
-        })
-
-        watchVolunteers(ws);
-    });
+    watchVolunteers();
 })
