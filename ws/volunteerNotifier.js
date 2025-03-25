@@ -2,7 +2,10 @@ const Volunteer = require("../models/volunteer.models.js");
 const Task = require("../models/task.models.js");
 const User = require("../models/user.models.js");
 const Notification = require("../models/notification.models.js");
+const Event = require("../models/event.models.js");
 const { putTaskAllocatedForVolunteer, getTaskAllocatedForVolunteer } = require("../utils/cache.js");
+const mailSender = require("../utils/mailSender.js");
+const taskAllocationTemplate = require("../mail/templates/taskAllocationEmailTemplate.js");
 
 const options = { fullDocument: "updateLookup" };
 const pipeline = [];
@@ -71,6 +74,8 @@ exports.watchVolunteers = () => {
                 for (const removedTask of removedTasks) {
                     await Notification.insertOne({ user: volunteer, type: 'deallot', event: next.fullDocument.event, task: removedTask });
                 }
+                const event = await Event.findOne({ _id: next.fullDocument.event });
+                await mailSender(volunteer.email, "Samarthanam Task Allocation Notification", taskAllocationTemplate(volunteer.name, newlyAllocatedTasks, removedTasks, event.name))
                 putTaskAllocatedForVolunteer(next.fullDocument, newTaskAllocated);
                 break;
         }
