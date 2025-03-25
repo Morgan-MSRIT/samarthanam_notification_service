@@ -66,10 +66,10 @@ exports.watchVolunteers = () => {
                     }
                 }
                 for (const newlyAllocatedTask of newlyAllocatedTasks) {
-                    await Notification.create({ user: volunteer.user, type: 'allot', event: newlyAllocatedTask.event, task: newlyAllocatedTask });
+                    await Notification.insertOne({ user: volunteer, type: 'allot', event: next.fullDocument.event, task: newlyAllocatedTask });
                 }
                 for (const removedTask of removedTasks) {
-                    await Notification.create({ user: volunteer.user, type: 'deallot', event: removedTask.event, task: removedTask });
+                    await Notification.insertOne({ user: volunteer, type: 'deallot', event: next.fullDocument.event, task: removedTask });
                 }
                 putTaskAllocatedForVolunteer(next.fullDocument, newTaskAllocated);
                 break;
