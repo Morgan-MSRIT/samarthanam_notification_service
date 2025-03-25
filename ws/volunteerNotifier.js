@@ -1,7 +1,7 @@
 const Volunteer = require("../models/volunteer.models.js");
 const Task = require("../models/task.models.js");
 const User = require("../models/user.models.js");
-const { broadcastMessage } = require("./wsServer.js");
+const Notification = require("../models/notification.models.js");
 const { putTaskAllocatedForVolunteer, getTaskAllocatedForVolunteer } = require("../utils/cache.js");
 
 const options = { fullDocument: "updateLookup" };
@@ -65,7 +65,12 @@ exports.watchVolunteers = () => {
                         removedTasks.push(previousTask);
                     }
                 }
-                broadcastMessage(JSON.stringify({ volunteer: volunteer, newlyAllocatedTasks: newlyAllocatedTasks, removedTasks: removedTasks }));
+                for (const newlyAllocatedTask of newlyAllocatedTasks) {
+                    await Notification.create({ user: volunteer.user, type: 'allot', event: newlyAllocatedTask.event, task: newlyAllocatedTask });
+                }
+                for (const removedTask of removedTasks) {
+                    await Notification.create({ user: volunteer.user, type: 'deallot', event: removedTask.event, task: removedTask });
+                }
                 putTaskAllocatedForVolunteer(next.fullDocument, newTaskAllocated);
                 break;
         }

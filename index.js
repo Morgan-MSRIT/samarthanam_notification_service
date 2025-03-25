@@ -1,10 +1,6 @@
 const express=require("express");
 const app=express();
 
-const { WebSocketServer } = require("ws");
-
-
-
 //connection for databse
 const database=require("./configs/database");
 const cors=require("cors");
